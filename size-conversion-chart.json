@@ -1,0 +1,20 @@
+{
+  "garment": "dress",
+  "cut": "women",
+  "anchor": null,
+  "rows": [
+    { "id": "dress-w-000", "US": "00", "UK": "2",  "EU": "30", "JP": "3", "CE": null },
+    { "id": "dress-w-00",  "US": "0",  "UK": "4",  "EU": "32", "JP": "5", "CE": null },
+    { "id": "dress-w-02",  "US": "2",  "UK": "6",  "EU": "34", "JP": "7", "CE": null },
+    { "id": "dress-w-04",  "US": "4",  "UK": "8",  "EU": "36", "JP": "9",  "CE": null },
+    { "id": "dress-w-06",  "US": "6",  "UK": "10", "EU": "38", "JP": "11",  "CE": null },
+    { "id": "dress-w-08",  "US": "8",  "UK": "12", "EU": "40", "JP": "13",  "CE": null },
+    { "id": "dress-w-10",  "US": "10", "UK": "14", "EU": "42", "JP": "15", "CE": null },
+    { "id": "dress-w-12",  "US": "12", "UK": "16", "EU": "44", "JP": "17", "CE": null },
+    { "id": "dress-w-14",  "US": "14", "UK": "18", "EU": "46", "JP": "19", "CE": null },
+    { "id": "dress-w-16",  "US": "16", "UK": "20", "EU": "48", "JP": "21", "CE": null },
+    { "id": "dress-w-18",  "US": "18", "UK": "22", "EU": "50", "JP": "23", "CE": null },
+    { "id": "dress-w-20",  "US": "20", "UK": "24", "EU": "52", "JP": null, "CE": null },
+    { "id": "dress-w-22",  "US": "22", "UK": "26", "EU": "54", "JP": null, "CE": null }
+  ]
+}
