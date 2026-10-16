@@ -245,3 +245,23 @@ npm run test:run  # run it once and exit
 npm run lint    # check code style
 npm run build   # produce a static build in dist/
 ```
+
+## Deployment
+
+Live at **https://miketocoding.github.io/size-converter/**
+
+Every push to `main` runs [.github/workflows/deploy.yml](.github/workflows/deploy.yml):
+
+1. `npm ci` — install the exact dependency versions from the lockfile
+2. `npm run lint`
+3. `npm run test:run`
+4. `npm run build`
+5. publish `dist/` to GitHub Pages
+
+The deploy job depends on the verify job, so a failing lint or test stops the
+pipeline before anything reaches the live site. Pull requests run steps 1-4 but
+do not deploy.
+
+The site is served from `/size-converter/` rather than a domain root, so
+`vite.config.js` sets `base` to match. Without it the page loads and every
+asset 404s.
