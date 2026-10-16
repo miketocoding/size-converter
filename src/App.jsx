@@ -1,121 +1,101 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import markets from './data/markets.json'
+import { convert } from './lib/convert.js'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  // What the user has chosen. These three drive everything on the page.
+  const [from, setFrom] = useState('US')
+  const [to, setTo] = useState('EU')
+  const [size, setSize] = useState('')
+
+  // Only one chart exists so far, so these are fixed.
+  // They become dropdowns once there are more charts.
+  const garment = 'dress'
+  const cut = 'women'
+  const trimmedSize = size.trim()
+  let resultContent
+
+  if (trimmedSize === '') {
+    resultContent = <p className="result-empty">Enter a size to convert.</p>
+  } else {
+    const result = convert({ garment, cut, from, to, size: trimmedSize })
+
+    if (!result.ok) {
+      if (result.reason === 'unknown_size') {
+        resultContent = (
+          <p className="result-error">
+            Sorry, we don&rsquo;t know that size in {from}.
+          </p>
+        )
+      } else if (result.reason === 'no_equivalent') {
+        resultContent = (
+          <p className="result-error">
+            Sorry, there is no equivalent size in {to}.
+          </p>
+        )
+      }
+
+    } else if (result.exact) {
+      resultContent = (
+        <p className="result-success">
+          {from} {trimmedSize} = {to} {result.values[0]} (exact)
+        </p>
+      )
+      
+    } else {
+      resultContent = (
+        <div className="result-success result-approximate">
+          <p>{from} {trimmedSize} = {to} {result.values[0]}</p>
+          <p className="result-note">⚠ {result.note}</p>
+        </div>
+      )
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <main>
+      <h1>Size Converter</h1>
+      <p className="subtitle">Women&rsquo;s dresses</p>
 
-      <div className="ticks"></div>
+      <div className="controls">
+        <label>
+          From
+            <select value={from} onChange={e => setFrom(e.target.value)}>
+              {markets.map(market => (
+                <option key={market.code} value={market.code}>
+                  {market.name}
+                </option>
+              ))}
+            </select>
+        </label>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <label>
+          Size
+            <input
+              type="text"
+              value={size}
+              onChange={e => setSize(e.target.value)}
+              placeholder="Enter size"
+            />
+        </label>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <label>
+          To
+            <select value={to} onChange={e => setTo(e.target.value)}>
+              {markets.map(market => (
+                <option key={market.code} value={market.code}>
+                  {market.name}
+                </option>
+              ))}
+            </select>
+        </label>
+      </div>
+
+      <div className="result" aria-live="polite">
+        {resultContent}
+      </div>
+    </main>
   )
 }
 
