@@ -4,7 +4,6 @@ import { convert } from './lib/convert.js'
 import './App.css'
 
 function App() {
-  // What the user has chosen. These three drive everything on the page.
   const [from, setFrom] = useState('US')
   const [to, setTo] = useState('EU')
   const [size, setSize] = useState('')
