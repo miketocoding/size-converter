@@ -63,8 +63,13 @@ function App() {
           From
             <select value={from} onChange={e => setFrom(e.target.value)}>
               {markets.map(market => (
-                <option key={market.code} value={market.code}>
+                <option
+                  key={market.code}
+                  value={market.code}
+                  disabled={market.provisional}
+                >
                   {market.name}
+                  {market.provisional ? ' — standard not yet published' : ''}
                 </option>
               ))}
             </select>
@@ -84,8 +89,13 @@ function App() {
           To
             <select value={to} onChange={e => setTo(e.target.value)}>
               {markets.map(market => (
-                <option key={market.code} value={market.code}>
+                <option
+                  key={market.code}
+                  value={market.code}
+                  disabled={market.provisional}
+                >
                   {market.name}
+                  {market.provisional ? ' — standard not yet published' : ''}
                 </option>
               ))}
             </select>

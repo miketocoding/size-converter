@@ -3,8 +3,9 @@
 A size conversion tool for Kylee's designer label: give a garment size in one
 market, get the equivalent in another.
 
-**Status:** data model settled, women's dresses keyed in and verified.
-Remaining charts, conversion code, UI, tests and CI are not yet built.
+**Status:** working end to end for women's dresses — data model, conversion
+logic (12 passing tests) and UI. The remaining six charts, styling and CI are
+not yet built.
 
 ---
 
@@ -109,6 +110,16 @@ ever surfaces provenance, they move into the data.
 **Every market list is built from `markets.json`.**
 Dropdowns, validation and tests all read the same registry, so no market name is
 hardcoded anywhere in the UI.
+
+**Ceres is shown but disabled, driven by the `provisional` flag.**
+Hiding it would leave Kylee unable to tell whether the signed distribution deal
+had been accounted for. Leaving it selectable would produce a failure with no
+explanation. So it renders greyed out and labelled "standard not yet published".
+The UI checks `market.provisional`, never the Ceres code specifically — when the
+standard publishes, flipping that flag and filling the column is the entire
+change. The converter refuses Ceres conversions regardless of what the UI allows:
+the interface preventing it is a convenience, the logic refusing it is the
+guarantee.
 
 **No backend.**
 A few hundred rows of static reference data, no accounts, nothing stored. A server
@@ -219,4 +230,18 @@ returns 23, flagged approximate, and US 22 → JP refuses.
 
 ## Running it
 
-*(TODO: add once the application exists.)*
+Requires Node.js 20 or newer.
+
+```bash
+npm install     # install dependencies
+npm run dev     # start the dev server, then open the printed localhost URL
+```
+
+Other commands:
+
+```bash
+npm test        # run the test suite in watch mode
+npm run test:run  # run it once and exit
+npm run lint    # check code style
+npm run build   # produce a static build in dist/
+```
