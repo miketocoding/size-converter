@@ -1,0 +1,7 @@
+[
+  { "code": "US", "name": "United States",  "provisional": false },
+  { "code": "UK", "name": "United Kingdom", "provisional": false },
+  { "code": "EU", "name": "Europe",         "provisional": false },
+  { "code": "JP", "name": "Japan",          "provisional": false },
+  { "code": "CE", "name": "Ceres",          "provisional": true  }
+]
