@@ -1,9 +1,26 @@
 :root {
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bone: #fbfaf8;
+  --ink: #16150f;
+  --muted: #8c857b;
+  --hairline: #e4dfd7;
+  --clay: #8a6a42;
+  --rust: #8a4a3c;
+
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: ui-sans-serif, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+
+  font-family: var(--sans);
+  color: var(--ink);
+  background-color: var(--bone);
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 2rem;
+  min-height: 100vh;
 }
