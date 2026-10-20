@@ -1,0 +1,25 @@
+{
+  "garment": "shoes",
+  "cut": "women",
+  "label": "Shoes",
+  "anchor": null,
+  "rows": [
+    { "id": "shoes-w-01", "US": "4",    "UK": "2",    "EU": "35",  "JP": null,   "CE": null },
+    { "id": "shoes-w-02", "US": "4.5",  "UK": "2.5",  "EU": null,  "JP": "21.5", "CE": null },
+    { "id": "shoes-w-03", "US": "5",    "UK": "3",    "EU": "36",  "JP": "22",   "CE": null },
+    { "id": "shoes-w-04", "US": "5.5",  "UK": "3.5",  "EU": null,  "JP": "22.5", "CE": null },
+    { "id": "shoes-w-05", "US": "6",    "UK": "4",    "EU": "37",  "JP": null,   "CE": null },
+    { "id": "shoes-w-06", "US": "6.5",  "UK": "4.5",  "EU": null,  "JP": "23",   "CE": null },
+    { "id": "shoes-w-07", "US": "7",    "UK": "5",    "EU": "38",  "JP": "23.5", "CE": null },
+    { "id": "shoes-w-08", "US": "7.5",  "UK": "5.5",  "EU": null,  "JP": null,   "CE": null },
+    { "id": "shoes-w-09", "US": "8",    "UK": "6",    "EU": "39",  "JP": "24",   "CE": null },
+    { "id": "shoes-w-10", "US": "8.5",  "UK": "6.5",  "EU": null,  "JP": "24.5", "CE": null },
+    { "id": "shoes-w-11", "US": "9",    "UK": "7",    "EU": "40",  "JP": "25",   "CE": null },
+    { "id": "shoes-w-12", "US": "9.5",  "UK": "7.5",  "EU": null,  "JP": "25.5", "CE": null },
+    { "id": "shoes-w-13", "US": "10",   "UK": "8",    "EU": "41",  "JP": "26",   "CE": null },
+    { "id": "shoes-w-14", "US": "10.5", "UK": "8.5",  "EU": null,  "JP": "26.5", "CE": null },
+    { "id": "shoes-w-15", "US": "11",   "UK": "9",    "EU": "42",  "JP": "28",   "CE": null },
+    { "id": "shoes-w-16", "US": "11.5", "UK": "9.5",  "EU": null,  "JP": null,   "CE": null },
+    { "id": "shoes-w-17", "US": "12",   "UK": "10",   "EU": null,  "JP": "29",   "CE": null }
+  ]
+}

@@ -1,9 +1,10 @@
 import dressWomen from '../data/charts/dress-women.json'
 import shoesMen from '../data/charts/shoes-men.json'
+import shoesWomen from '../data/charts/shoes-women.json'
 
 // The charts the app knows about. Exported so the UI can build its
 // garment options from the same list the lookup uses.
-export const charts = [dressWomen, shoesMen]
+export const charts = [dressWomen, shoesWomen, shoesMen]
 
 export function findChart(garment, cut) {
   return charts.find(chart => chart.garment === garment && chart.cut === cut)

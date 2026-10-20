@@ -3,9 +3,9 @@
 A size conversion tool for Kylee's designer label: give a garment size in one
 market, get the equivalent in another.
 
-**Status:** working end to end for women's dresses — data model, conversion
-logic (12 passing tests) and UI. The remaining six charts, styling and CI are
-not yet built.
+**Status:** working end to end, deployed, with three of the seven charts
+keyed in — women's dresses, women's shoes, men's shoes. Shirts and pants are
+not yet sourced. 25 passing tests; CI runs them on every push.
 
 ---
 
@@ -132,85 +132,125 @@ Kylee wants to edit charts herself.
 
 ## Data sources
 
-Where sources disagreed, the call and the reasoning are recorded below.
+Sourcing differs per chart. No single reference covered every garment and
+market, and the best source for one column was often not the best for another.
+
+**Method.** Each chart's sources were scored against each other on the columns
+they share — if three charts publish US↔UK, any source deviating there was
+downgraded for the column that *couldn't* be cross-checked. Where retailers
+disagreed, preference went to the one with commercial exposure to that market
+being wrong: a British retailer on UK sizing, a US retailer on US sizing.
+Returns cost money, and that is a stronger signal than company size.
+
+### Women's dresses
 
 | Market | Source | Retrieved |
 |---|---|---|
-| US, UK, EU | Sizely, *International Dress Size Conversion Chart* — size.ly/conversion-charts/international-dress-size-conversion-chart | 2026-10-15 |
-| JP (US 0–18) | Wearview, *International Conversion Chart for Women's Dresses* — wearview.co/conversion-charts/ | 2026-10-16 |
-| JP (US 00) | PLAZA HOMES, *Clothing Sizes in Japan* — realestate-tokyo.com/living-in-tokyo/japan-info/clothing-sizes-in-japan/ | 2026-10-15 |
+| US, UK, EU | Sizely, *International Dress Size Conversion Chart* — https://www.size.ly/conversion-charts/international-dress-size-conversion-chart#size-chart | 2026-10-15 |
+| JP (US 0–18) | Wearview, *International Conversion Chart for Women's Dresses* — https://www.wearview.co/conversion-charts/international-dress-size-conversion-chart | 2026-10-16 |
+| JP (US 00) | PLAZA HOMES, *Clothing Sizes in Japan* — https://www.realestate-tokyo.com/living-in-tokyo/japan-info/clothing-sizes-in-japan/ | 2026-10-15 |
 
-Consulted as cross-checks, not used as data:
+Cross-checked, not used: Calculover (https://calculover.com/daily-life/clothing/size-converter/),
+SoPicks (https://sopicks.com/blog/international-dress-size-conversion-chart), and an
+Int/US/UK/DE/FR/IT comparison table *(TODO: record URL)*.
 
-- Calculover — calculover.com/daily-life/clothing/size-converter/
-- SoPicks — sopicks.com/blog/international-dress-size-conversion-chart
-- An Int/US/UK/DE/FR/IT comparison table *(TODO: record URL)*
+### Men's shoes
 
-**Method.** No single source covered all four markets, so sources were scored by
-checking the columns that appear in several of them (US↔UK, and the European
-systems). A source that deviated from consensus on a checkable column was
-downgraded for the column that could not be checked. Sizely and Wearview each
-matched consensus on every checkable column.
+| Market | Source | Retrieved |
+|---|---|---|
+| US, UK, EU | ASOS, *Men's Shoe Size Guide* — https://www.asos.com/us/discover/size-charts/men/shoes/ | 2026-10-20 |
+| JP | The Purple Store, *Shoe Size Conversion* — https://www.thepurplestore.com/shoe-size-conversion.shtml | 2026-10-20 |
+
+Cross-checked, not used: Zappos (https://www.zappos.com/c/shoe-size-conversion).
+
+### Women's shoes
+
+| Market | Source | Retrieved |
+|---|---|---|
+| US, UK | Zappos, *Shoe Size Charts* — https://www.zappos.com/c/shoe-size-conversion | 2026-10-20 |
+| EU | ASOS, *Women's Shoe Size Guide* — https://www.asos.com/us/discover/size-charts/women/shoes/ | 2026-10-20 |
+| JP | The Purple Store, *Shoe Size Conversion* — thepurplestore.com/shoe-size-conversion.shtml | 2026-10-20 |
+
+The Purple Store is a small retailer with no particular authority, and its
+European columns contain values like 38.7 and 39.3 — arithmetic conversions, not
+manufacturable sizes. Those columns were rejected. Its Japanese columns are
+internally consistent and were used, because no stronger source covered Japan
+for footwear. **Source quality was judged per column, not per site.**
 
 ## Decisions where sources disagreed
 
-| Column | Conflict | Chose | Why |
+| Chart / column | Conflict | Chose | Why |
 |---|---|---|---|
-| UK | SoPicks gives UK = US + 6; Sizely, Calculover and a third chart give US + 4 | **US + 4** | 3:1 consensus. SoPicks' whole ladder sits one step high, which also shifts its EU column |
-| JP | Four candidate rules across four sources: US+1 (Calculover), US+3 (PLAZA's table), US+5 (PLAZA's prose, Wearview), and a compressed many-to-one mapping (SoPicks) | **US + 5** | Two independent sources agree. Wearview matched consensus on every other column; PLAZA states the same rule in prose |
-| JP (US 00) | Not covered by Wearview | **3** | PLAZA's smallest row, and the correct next step down Wearview's ladder |
-| EU | Sources label different systems "EU": Sizely's EU is the French convention, Calculover's is German. Three sources split Italy / France / Germany outright | **French** | Matches the primary source. See *Assumptions* |
-| IT | Calculover gives IT = US + 34; two other sources give US + 36 | **not used** | Italy is out of scope; recorded because it cost Calculover a reliability point |
+| dress-women · UK | SoPicks gives UK = US + 6; three other sources give US + 4 | **US + 4** | 3:1 consensus. SoPicks' whole ladder sits one step high, which also shifts its EU column |
+| dress-women · JP | Four rules across four sources: US+1, US+3, US+5, and a compressed many-to-one mapping | **US + 5** | Two independent sources agree. Wearview matched consensus on every other column; PLAZA states the same rule in prose |
+| dress-women · JP (US 00) | Not covered by Wearview | **3** | PLAZA's smallest row, and the next step down Wearview's ladder |
+| dress-women · EU | Sources label different systems "EU" — Sizely's is French, Calculover's German. Three sources split Italy / France / Germany outright | **French** | Matches the primary source. See *Assumptions* |
+| shoes-men · US↔UK | Zappos and Purple Store give US = UK + 0.5; ASOS gives US = UK + 1 | **ASOS** | All three agree on foot length for a given US size, so the disagreement is about UK *labelling*, not fit. A British retailer carries the returns cost on UK sizing, and ASOS matches the more commonly published rule. Lowest-confidence column in that chart |
+| shoes-men · EU | Zappos gives whole numbers with duplicates (39 twice) and ranges ("40-41"); ASOS gives distinct values including halves | **ASOS** | Real, purchasable sizes, 1:1 across the range. Zappos' ranges are its own simplification, not a property of European sizing |
+| shoes-women · spine | ASOS publishes whole US sizes only; Zappos publishes the full half-size ladder | **Zappos for US/UK, ASOS for EU** | US women's shoes sell predominantly in half sizes, so a whole-size chart would miss the most common input. The two agree on US↔UK, so combining them introduces no conflict there |
+| shoes-women · JP | Purple Store lists US 6 and 6.5 both as JP 23, and US 7.5 and 8 both as 24 | **nulled the smaller of each pair** | Japanese sizing is genuinely coarser here. Nulling the smaller lets the rounding rule return the same value the source gives — flagged approximate — rather than asserting it as exact. Nulling the larger would have contradicted the source |
 
-PLAZA's table was initially read as contradicting its own prose. It does not —
-its US column renders `00` as `0`, and read correctly its table, its prose and
-Wearview all give US + 5.
+PLAZA's dress table was initially read as contradicting its own prose. It does
+not — its US column renders `00` as `0`, and read correctly its table, its prose
+and Wearview all give US + 5.
 
 ## Known gaps
 
 | Chart | Market | Rows | Why |
 |---|---|---|---|
-| dress-women | JP | US 20, US 22 | Wearview's table ends at US 18. Extending the pattern would mean inventing sizes that may not be manufactured — Japanese sizing runs smaller and tops out earlier |
-| dress-women | CE | all | Ceres' standard is unpublished |
+| dress-women | JP | US 20, 22 | Wearview's table ends at US 18. Extending the pattern would mean inventing sizes that may not be manufactured — Japanese sizing runs smaller and tops out earlier |
+| shoes-men | JP | US 4, 5, 13, 14, 15 | The Purple Store's table runs US 5.5–12.5 |
+| shoes-women | EU | every half size, and US 12 | ASOS publishes whole sizes only, and stops at US 11 |
+| shoes-women | JP | US 4, 6, 7.5, 11.5 | Outside The Purple Store's range, or removed as duplicates (above) |
+| *all charts* | CE | all | Ceres' standard is unpublished |
 
-Both are handled by the conversion rule rather than papered over: US 20 → JP
-returns 23, flagged approximate, and US 22 → JP refuses.
+Gaps are handled by the conversion rule rather than papered over. US 20 → JP in
+dresses returns 23 flagged approximate; US 22 → JP refuses outright. In women's
+shoes, US 7.5 → EU returns 39 rounded up — which is the correct advice anyway,
+since that foot sits between two European sizes.
 
 ## Assumptions
 
-- **"EU" follows the French convention** used by the primary source. Italian
-  sizing runs ~4 higher and German ~2 lower. A garment labelled EU 36 would be
-  called a 40 in Milan and a 34 in Berlin. Adding those markets would be
-  data-only — see *Questions for Kylee*.
-- **Size range** is US 00–22, taken from the primary source rather than from
-  Kylee's actual catalogue.
-- **Japan is the lowest-confidence column.** No two sources fully agreed.
+- **"EU" follows the French convention** for dresses. Italian sizing runs ~4
+  higher and German ~2 lower. A garment labelled EU 36 would be called a 40 in
+  Milan and a 34 in Berlin. Adding those markets would be data-only.
+- **Japan is the lowest-confidence market throughout.** No two sources fully
+  agreed on any chart.
+- **Women's shoes combine two sources whose feet don't quite match.** Zappos and
+  ASOS agree on US↔UK, but their foot-length columns differ by ~4mm for the same
+  US size, so European values may sit up to half a size off at the margins.
+- **Size ranges come from reference charts, not Kylee's catalogue.**
 - **Ceres is included with placeholder nulls** and flagged `provisional` in the
-  market registry, so the UI can mark it as unpublished. Inventing plausible
-  Ceres sizes would be the exact error this tool exists to prevent.
+  market registry. Inventing plausible Ceres sizes would be the exact error this
+  tool exists to prevent.
 - **Men's dresses are not included.** The brief implies all four garments in both
   cuts, but no standard sizing exists for men's dresses. Flagged rather than
-  invented.
+  invented — and because the garment list is derived from the charts that exist,
+  the combination is simply unreachable in the UI.
 - **"Men's" and "women's" describe the garment cut**, not the wearer.
 
 ## Questions for Kylee
 
-1. **Are these standard sizes or your sizes?** Designer labels routinely run their
-   own scale. If your patterns differ from published charts, this tool is
-   converting between systems your garments do not actually follow — and the right
-   build is digitising your own measurements instead. This is the question that
-   most affects whether the tool is correct.
-2. **Which European countries are your stockists in?** A single "EU" column
+1. **Are these standard sizes or your sizes?** Designer labels routinely run
+   their own scale. If your patterns differ from published charts, this tool is
+   converting between systems your garments do not actually follow — and the
+   right build is digitising your own measurements instead. This is the question
+   that most affects whether the tool is correct.
+2. **Do you have last measurements for your shoes?** They would settle the
+   European half-size question better than any public chart, and resolve the
+   ~4mm disagreement between sources on women's.
+3. **Men's shoes: do your UK labels run a full size below US, or half a size?**
+   Sources genuinely disagree and I picked one.
+4. **Which European countries are your stockists in?** A single "EU" column
    mislabels for Italian and German shops.
-3. **What size range does the catalogue actually cover?** The current range comes
-   from a reference chart, not from your products.
-4. **Does the catalogue include men's dresses?** If so, how are they sized?
-5. **For shirts, do you print alpha sizes (S/M/L) or neck measurements?** Both are
-   used; the tool currently assumes alpha.
-6. **Do you need several markets on one label**, or one at a time? This changes
+5. **What size ranges does the catalogue actually cover?** Current ranges come
+   from reference charts, not your products.
+6. **Does the catalogue include men's dresses?** If so, how are they sized?
+7. **For shirts, do you print alpha sizes (S/M/L) or neck measurements?** Both
+   are used; the tool will assume alpha unless told otherwise.
+8. **Do you need several markets on one label**, or one at a time? This changes
    the interface meaningfully.
-7. **Do you sell unisex or children's pieces?**
-8. **How far do your Japanese sizes go?** Sources stop at US 18.
+9. **Do you sell unisex or children's pieces?**
 
 ## With more time
 
