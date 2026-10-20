@@ -1,17 +1,43 @@
 import { useState } from 'react'
 import markets from './data/markets.json'
-import { convert } from './lib/convert.js'
+import { charts, convert } from './lib/convert.js'
 import './App.css'
 
+// How each cut is written on screen. The cuts themselves come from the chart
+// list below, so a tab only appears once there is a chart to put behind it.
+const CUT_LABELS = { women: "Women's", men: "Men's" }
+
+const availableCuts = [...new Set(charts.map(chart => chart.cut))]
+
 function App() {
+  const [cut, setCut] = useState('women')
+  const [garment, setGarment] = useState('dress')
   const [from, setFrom] = useState('US')
   const [to, setTo] = useState('EU')
   const [size, setSize] = useState('')
 
-  // Only one chart exists so far, so these are fixed.
-  // They become dropdowns once there are more charts.
-  const garment = 'dress'
-  const cut = 'women'
+  // The garments available in the cut currently selected.
+  const garmentsInCut = charts.filter(chart => chart.cut === cut)
+
+  // Changing the cut keeps the garment where that garment also exists in the
+  // new cut (women's shoes -> men's shoes), and falls back otherwise
+  // (women's dresses -> men's, where no dress chart exists).
+  function selectCut(nextCut) {
+    const available = charts.filter(chart => chart.cut === nextCut)
+    setCut(nextCut)
+    if (!available.some(chart => chart.garment === garment)) {
+      setGarment(available[0].garment)
+    }
+    setSize('')
+  }
+
+  // Cut and garment define *what* is being sized, so a previously typed size
+  // stops meaning anything when either changes. Markets are left alone.
+  function selectGarment(nextGarment) {
+    setGarment(nextGarment)
+    setSize('')
+  }
+
   const trimmedSize = size.trim()
   let resultContent
 
@@ -41,7 +67,7 @@ function App() {
           {from} {trimmedSize} = {to} {result.values[0]} (exact)
         </p>
       )
-      
+
     } else {
       resultContent = (
         <div className="result-success result-approximate">
@@ -54,50 +80,76 @@ function App() {
 
   return (
     <main>
-      <h1>Size Converter</h1>
-      <p className="subtitle">Women&rsquo;s dresses</p>
+      <header className="masthead">
+        <h1>Size Converter</h1>
+
+        <div className="tabs">
+          {availableCuts.map(cutCode => (
+            <button
+              key={cutCode}
+              type="button"
+              className={cutCode === cut ? 'tab tab-active' : 'tab'}
+              aria-pressed={cutCode === cut}
+              onClick={() => selectCut(cutCode)}
+            >
+              {CUT_LABELS[cutCode]}
+            </button>
+          ))}
+        </div>
+      </header>
+
+      <label className="garment-field">
+        Garment
+        <select value={garment} onChange={e => selectGarment(e.target.value)}>
+          {garmentsInCut.map(chart => (
+            <option key={chart.garment} value={chart.garment}>
+              {chart.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <div className="controls">
         <label>
           From
-            <select value={from} onChange={e => setFrom(e.target.value)}>
-              {markets.map(market => (
-                <option
-                  key={market.code}
-                  value={market.code}
-                  disabled={market.provisional}
-                >
-                  {market.name}
-                  {market.provisional ? ' — standard not yet published' : ''}
-                </option>
-              ))}
-            </select>
+          <select value={from} onChange={e => setFrom(e.target.value)}>
+            {markets.map(market => (
+              <option
+                key={market.code}
+                value={market.code}
+                disabled={market.provisional}
+              >
+                {market.name}
+                {market.provisional ? ' — standard not yet published' : ''}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label>
           Size
-            <input
-              type="text"
-              value={size}
-              onChange={e => setSize(e.target.value)}
-              placeholder="Enter size"
-            />
+          <input
+            type="text"
+            value={size}
+            onChange={e => setSize(e.target.value)}
+            placeholder="Enter size"
+          />
         </label>
 
         <label>
           To
-            <select value={to} onChange={e => setTo(e.target.value)}>
-              {markets.map(market => (
-                <option
-                  key={market.code}
-                  value={market.code}
-                  disabled={market.provisional}
-                >
-                  {market.name}
-                  {market.provisional ? ' — standard not yet published' : ''}
-                </option>
-              ))}
-            </select>
+          <select value={to} onChange={e => setTo(e.target.value)}>
+            {markets.map(market => (
+              <option
+                key={market.code}
+                value={market.code}
+                disabled={market.provisional}
+              >
+                {market.name}
+                {market.provisional ? ' — standard not yet published' : ''}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
 
