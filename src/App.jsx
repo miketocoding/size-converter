@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import markets from './data/markets.json'
-import { charts, convert } from './lib/convert.js'
+import { charts, convert, findChart } from './lib/convert.js'
 import './App.css'
 
 // How each cut is written on screen. The cuts themselves come from the chart
@@ -16,8 +16,10 @@ function App() {
   const [to, setTo] = useState('EU')
   const [size, setSize] = useState('')
 
-  // The garments available in the cut currently selected.
+  // The garments available in the cut currently selected, and the chart
+  // behind the current selection (used for its explanatory note).
   const garmentsInCut = charts.filter(chart => chart.cut === cut)
+  const currentChart = findChart(garment, cut)
 
   // Changing the cut keeps the garment where that garment also exists in the
   // new cut (women's shoes -> men's shoes), and falls back otherwise
@@ -108,6 +110,10 @@ function App() {
           ))}
         </select>
       </label>
+
+      {currentChart.note && (
+        <p className="garment-note">{currentChart.note}</p>
+      )}
 
       <div className="controls">
         <label>

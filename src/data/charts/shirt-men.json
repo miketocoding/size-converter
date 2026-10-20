@@ -1,0 +1,18 @@
+{
+  "garment": "shirt",
+  "cut": "men",
+  "label": "Dress shirts",
+  "note": "Dress shirts only. US and UK sizes are neck circumference in inches, EU is neck in centimetres, Japan is chest in centimetres.",
+  "anchor": null,
+  "rows": [
+    { "id": "shirt-m-01", "US": "14",   "UK": "14",   "EU": "36", "JP": "87",  "CE": null },
+    { "id": "shirt-m-02", "US": "14.5", "UK": "14.5", "EU": "37", "JP": "91",  "CE": null },
+    { "id": "shirt-m-03", "US": "15",   "UK": "15",   "EU": "38", "JP": "97",  "CE": null },
+    { "id": "shirt-m-04", "US": "15.5", "UK": "15.5", "EU": "39", "JP": "102", "CE": null },
+    { "id": "shirt-m-05", "US": "16",   "UK": "16",   "EU": "41", "JP": "112", "CE": null },
+    { "id": "shirt-m-06", "US": "16.5", "UK": "16.5", "EU": "42", "JP": "117", "CE": null },
+    { "id": "shirt-m-07", "US": "17",   "UK": "17",   "EU": "43", "JP": "122", "CE": null },
+    { "id": "shirt-m-08", "US": "17.5", "UK": "17.5", "EU": "44", "JP": "127", "CE": null },
+    { "id": "shirt-m-09", "US": "18",   "UK": "18",   "EU": "45", "JP": "132", "CE": null }
+  ]
+}

@@ -2,6 +2,7 @@
   "garment": "shoes",
   "cut": "women",
   "label": "Shoes",
+  "note": "US and UK cover half sizes. European sizes are published for whole sizes only, so half sizes are rounded up. Japanese sizes are foot length in centimetres.",
   "anchor": null,
   "rows": [
     { "id": "shoes-w-01", "US": "4",    "UK": "2",    "EU": "35",  "JP": null,   "CE": null },

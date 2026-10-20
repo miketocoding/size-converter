@@ -2,6 +2,7 @@
   "garment": "shoes",
   "cut": "men",
   "label": "Shoes",
+  "note": "Half sizes are available from US 8.5 upward. Japanese sizes are foot length in centimetres.",
   "anchor": null,
   "rows": [
     { "id": "shoes-m-01", "US": "4",    "UK": "3",    "EU": "35.5", "JP": null,   "CE": null },
